@@ -64,9 +64,8 @@ describe('POS', () => {
     ];
     it('should pos.barcodeCounts is data', () => {
       var pos = new POS();
-      pos.sameBarcodeCounts(codes);
 
-      expect(pos.barcodeCounts).toEqual([{barcode: 'ITEM000001', count: 5}, {barcode: 'ITEM000004', count: 3}]);
+      expect(pos.sameBarcodeCounts(codes)).toEqual([{barcode: 'ITEM000001', count: 5}, {barcode: 'ITEM000004', count: 3}]);
     });
   });
 });
