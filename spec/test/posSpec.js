@@ -62,10 +62,56 @@ describe('POS', () => {
         'ITEM000004',
         'ITEM000004'
     ];
-    it('should pos.barcodeCounts is data', () => {
+    it('should return right data', () => {
       var pos = new POS();
 
       expect(pos.sameBarcodeCounts(codes)).toEqual([{barcode: 'ITEM000001', count: 5}, {barcode: 'ITEM000004', count: 3}]);
+    });
+  });
+
+  describe('transCodeToInfo', () => {
+    it('should return right data', () => {
+      var pos = new POS();
+      pos.setInfoes(itemsInfo);
+      var barcode = 'ITEM000001';
+      expect(pos.transCodeToInfo(barcode)).toEqual({
+        barcode: 'ITEM000001',
+        name: '可口可乐',
+        unit: '瓶',
+        category: '食品',
+        subCategory: '碳酸饮料',
+        price: 26.00
+      });
+    });
+  });
+
+  describe('transCodesToInfoes', () => {
+    var barcodeCounts = [{barcode: 'ITEM000001', count: 5}, {barcode: 'ITEM000004', count: 3}];
+    it('should return right data', () => {
+      var pos = new POS();
+      pos.setInfoes(itemsInfo);
+      var itemInfoCounts = [{
+        item:{
+          barcode: 'ITEM000001',
+          name: '可口可乐',
+          unit: '瓶',
+          category: '食品',
+          subCategory: '碳酸饮料',
+          price: 26.00
+        },
+        count: 5
+      },{
+        item:{
+          barcode: 'ITEM000004',
+          name: '加多宝',
+          unit: '罐',
+          category: '食品',
+          subCategory: '凉茶饮料',
+          price: 4.00
+        },
+        count: 3
+      }];
+      expect(pos.transCodesToInfoes(barcodeCounts)).toEqual(itemInfoCounts);
     });
   });
 });
