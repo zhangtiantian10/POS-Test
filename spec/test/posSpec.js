@@ -33,7 +33,7 @@ describe('POS', () => {
   ];
   describe('setInfoes', () => {
     it('should pos.itemsInfo is right', () => {
-      var pos = new POS;
+      var pos = new POS();
       pos.setInfoes(itemsInfo);
       expect(pos.itemsInfo).toEqual(itemsInfo);
     });
