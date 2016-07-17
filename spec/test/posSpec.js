@@ -163,7 +163,7 @@ describe('POS', () => {
               price: 4.00
             },count: 3
           },subTotal: 12
-        }]
+        }];
         expect(pos.getSubTotal(itemInfoCounts)).toEqual(itemsGetSubToal);
       });
     });
@@ -195,7 +195,8 @@ describe('POS', () => {
               price: 4.00
             },count: 3
           },subTotal: 12
-        }]
+        }];
+        expect(pos.getSubTotal(itemInfoCounts)).toEqual(itemsGetSubToal);
       });
     });
   });
