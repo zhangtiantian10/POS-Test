@@ -50,4 +50,23 @@ describe('POS', () => {
       expect(pos.promotions).toEqual(promotions);
     })
   });
+
+  describe('sameBarcodeCount', () => {
+    var codes = [
+        'ITEM000001',
+        'ITEM000001',
+        'ITEM000001',
+        'ITEM000001',
+        'ITEM000001',
+        'ITEM000004',
+        'ITEM000004',
+        'ITEM000004'
+    ];
+    it('should pos.barcodeCounts is data', () => {
+      var pos = new POS();
+      pos.sameBarcodeCounts(codes);
+
+      expect(pos.barcodeCounts).toEqual([{barcode: 'ITEM000001', count: 5}, {barcode: 'ITEM000004', count: 3}]);
+    });
+  });
 });
