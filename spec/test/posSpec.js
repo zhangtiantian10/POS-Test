@@ -168,4 +168,39 @@ describe('POS', () => {
       });
     });
   });
+
+  describe('searchPromotions', () => {
+    var barcode = 'ITEM000001';
+
+    describe('when no promotions', () => {
+      it('should return 0', () => {
+        var pos = new POS();
+        expect(pos.searchPromotions(barcode)).toEqual(0)
+      });
+    });
+
+    describe('when promotion is buy two send one', () => {
+      it('should return 1', () => {
+        var pos = new POS();
+        pos.setPromotions(['ITEM000001','ITEM000003'],['ITEM000002']);
+        expect(pos.searchPromotions(barcode)).toEqual(1);
+      });
+    });
+
+    describe('when promotion is five percent discount', () => {
+      it('should return 2', () => {
+        var pos = new POS();
+        pos.setPromotions(['ITEM000002'],['ITEM000001','ITEM000003']);
+        expect(pos.searchPromotions(barcode)).toEqual(2);
+      });
+    });
+
+    describe('when promotions are five percent discount and buy two send one', () => {
+      it('should return 1', () => {
+        var pos = new POS();
+        pos.setPromotions(['ITEM000001','ITEM000002'],['ITEM000001','ITEM000003']);
+        expect(pos.searchPromotions(barcode)).toEqual(1);
+      });
+    });
+  });
 });
