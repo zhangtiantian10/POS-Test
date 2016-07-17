@@ -31,11 +31,23 @@ describe('POS', () => {
       price: 4.00
     }
   ];
+
   describe('setInfoes', () => {
     it('should pos.itemsInfo is right', () => {
       var pos = new POS();
       pos.setInfoes(itemsInfo);
       expect(pos.itemsInfo).toEqual(itemsInfo);
     });
+  });
+
+  describe('setPromotions', () => {
+    var buyTwoGetOneFree = ['ITEM000001','ITEM000002'];
+    var fivePercentDiscount = ['ITEM000001'];
+    it('should pos.promotions is right', () => {
+      var pos = new POS();
+      pos.setPromotions(buyTwoGetOneFree, fivePercentDiscount);
+      var promotions = {buyTwoGetOneFree: buyTwoGetOneFree, fivePercentDiscount: fivePercentDiscount};
+      expect(pos.promotions).toEqual(promotions);
+    })
   });
 });
