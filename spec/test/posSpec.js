@@ -125,7 +125,7 @@ describe('POS', () => {
         subCategory: '碳酸饮料',
         price: 26.00
       },
-      count: 5
+      count: 6
     },{
       item:{
         barcode: 'ITEM000004',
@@ -150,8 +150,8 @@ describe('POS', () => {
               category: '食品',
               subCategory: '碳酸饮料',
               price: 26.00
-            },count: 5
-          },subTotal: 130
+            },count: 6
+          },subTotal: 156
         },{
           itemInfoCount: {
             item : {
@@ -163,7 +163,39 @@ describe('POS', () => {
               price: 4.00
             },count: 3
           },subTotal: 12
-        }]
+        }];
+        expect(pos.getSubTotal(itemInfoCounts)).toEqual(itemsGetSubToal);
+      });
+    });
+
+    describe('when promotion is buy two send one', () => {
+      it('should return right data', () => {
+        var pos = new POS();
+        pos.setPromotions(['ITEM000001','ITEM000003'],['ITEM000002']);
+        var itemsGetSubToal = [{
+          itemInfoCount: {
+            item: {
+              barcode: 'ITEM000001',
+              name: '可口可乐',
+              unit: '瓶',
+              category: '食品',
+              subCategory: '碳酸饮料',
+              price: 26.00
+            },count: 6
+          },subTotal: 104,
+          saveTotal: 52
+        },{
+          itemInfoCount: {
+            item : {
+              barcode: 'ITEM000004',
+              name: '加多宝',
+              unit: '罐',
+              category: '食品',
+              subCategory: '凉茶饮料',
+              price: 4.00
+            },count: 3
+          },subTotal: 12
+        }];
         expect(pos.getSubTotal(itemInfoCounts)).toEqual(itemsGetSubToal);
       });
     });
