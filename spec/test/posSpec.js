@@ -151,7 +151,8 @@ describe('POS', () => {
               subCategory: '碳酸饮料',
               price: 26.00
             },count: 6
-          },subTotal: 156
+          },subTotal: 156,
+          saveTotal: 0
         },{
           itemInfoCount: {
             item : {
@@ -162,7 +163,8 @@ describe('POS', () => {
               subCategory: '凉茶饮料',
               price: 4.00
             },count: 3
-          },subTotal: 12
+          },subTotal: 12,
+          saveTotal: 0
         }];
         expect(pos.getSubTotal(itemInfoCounts)).toEqual(itemsGetSubToal);
       });
@@ -194,7 +196,8 @@ describe('POS', () => {
               subCategory: '凉茶饮料',
               price: 4.00
             },count: 3
-          },subTotal: 12
+          },subTotal: 12,
+          saveTotal: 0
         }];
         expect(pos.getSubTotal(itemInfoCounts)).toEqual(itemsGetSubToal);
       });
@@ -226,7 +229,8 @@ describe('POS', () => {
               subCategory: '凉茶饮料',
               price: 4.00
             },count: 3
-          },subTotal: 12
+          },subTotal: 12,
+          saveTotal: 0
         }];
         expect(pos.getSubTotal(itemInfoCounts)).toEqual(itemsGetSubToal);
       });
@@ -258,7 +262,8 @@ describe('POS', () => {
               subCategory: '凉茶饮料',
               price: 4.00
             },count: 3
-          },subTotal: 12
+          },subTotal: 12,
+          saveTotal: 0
         }];
         expect(pos.getSubTotal(itemInfoCounts)).toEqual(itemsGetSubToal);
       });
