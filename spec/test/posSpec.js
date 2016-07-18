@@ -239,7 +239,7 @@ describe('POS', () => {
     describe('when promotions are five percent discount and buy two send one', () => {
       it('should return right data', () => {
         var pos = new POS();
-        pos.setPromotions(['ITEM000001','ITEM000003'],['ITEM000001','ITEM000002']);
+        pos.setPromotions(['ITEM000001','ITEM000003'],['ITEM000002','ITEM000004']);
         var itemsGetSubToal = [{
           itemInfoCount: {
             item: {
@@ -262,8 +262,8 @@ describe('POS', () => {
               subCategory: '凉茶饮料',
               price: 4.00
             },count: 3
-          },subTotal: 12,
-          saveTotal: 0
+          },subTotal: 11.4,
+          saveTotal: 0.6
         }];
         expect(pos.getSubTotal(itemInfoCounts)).toEqual(itemsGetSubToal);
       });
@@ -520,13 +520,13 @@ describe('POS', () => {
             subCategory: '凉茶饮料',
             price: 4.00
           },count: 3
-        },subTotal: 12,
-        saveTotal: 0
+        },subTotal: 11.4,
+        saveTotal: 0.6
       }];
 
       it('should return right data', () => {
         var pos = new POS();
-        pos.setPromotions(['ITEM000001','ITEM000003'],['ITEM000001','ITEM000002']);
+        pos.setPromotions(['ITEM000001','ITEM000003'],['ITEM000002','ITEM000004']);
         var itemsGetTotal = {
           itemsGetSubToal : [{
             itemInfoCount: {
@@ -550,11 +550,11 @@ describe('POS', () => {
                 subCategory: '凉茶饮料',
                 price: 4.00
               },count: 3
-            },subTotal: 12,
-            saveTotal: 0
+            },subTotal: 11.4,
+            saveTotal: 0.6
           }],
-          total : 116,
-          saved : 52
+          total : 115.4,
+          saved : 52.6
         }
 
         expect(pos.getTotal(itemsGetSubToal)).toEqual(itemsGetTotal);
@@ -563,4 +563,191 @@ describe('POS', () => {
 
 
   });
+
+  describe('print', () => {
+    describe('when no promotions', () => {
+      var itemsGetTotal = {
+        itemsGetSubToal : [{
+          itemInfoCount: {
+            item: {
+              barcode: 'ITEM000001',
+              name: '可口可乐',
+              unit: '瓶',
+              category: '食品',
+              subCategory: '碳酸饮料',
+              price: 26.00
+            },count: 6
+          },subTotal: 156,
+          saveTotal: 0
+        },{
+          itemInfoCount: {
+            item : {
+              barcode: 'ITEM000004',
+              name: '加多宝',
+              unit: '罐',
+              category: '食品',
+              subCategory: '凉茶饮料',
+              price: 4.00
+            },count: 3
+          },subTotal: 12,
+          saveTotal: 0
+        }],
+        total : 168,
+        saved : 0
+      };
+
+      it('should return right data', () => {
+        var pos = new POS();
+        var printText = `***<没钱赚商店>购物清单***
+名称：可口可乐，数量：6瓶，单价：26.00(元)，小计：156.00(元)
+名称：加多宝，数量：3罐，单价：4.00(元)，小计：12.00(元)
+----------------------
+总计：168.00(元)
+**********************`;
+        expect(pos.print(itemsGetTotal)).toEqual(printText);
+      });
+    });
+
+    describe('when promotion is buy two send one', () => {
+      var itemsGetTotal = {
+        itemsGetSubToal : [{
+          itemInfoCount: {
+            item: {
+              barcode: 'ITEM000001',
+              name: '可口可乐',
+              unit: '瓶',
+              category: '食品',
+              subCategory: '碳酸饮料',
+              price: 26.00
+            },count: 6
+          },subTotal: 104,
+          saveTotal: 52
+        },{
+          itemInfoCount: {
+            item : {
+              barcode: 'ITEM000004',
+              name: '加多宝',
+              unit: '罐',
+              category: '食品',
+              subCategory: '凉茶饮料',
+              price: 4.00
+            },count: 3
+          },subTotal: 12,
+          saveTotal: 0
+        }],
+        total : 116,
+        saved : 52
+      };
+
+      it('should return right data', () => {
+        var pos = new POS();
+        pos.setPromotions(['ITEM000001','ITEM000003'],['ITEM000002']);
+        var printText = `***<没钱赚商店>购物清单***
+名称：可口可乐，数量：6瓶，单价：26.00(元)，小计：104.00(元)
+名称：加多宝，数量：3罐，单价：4.00(元)，小计：12.00(元)
+----------------------
+买二赠一商品：
+名称：可口可乐，数量：2瓶
+----------------------
+总计：116.00(元)
+节省：52.00(元)
+**********************`;
+        expect(pos.print(itemsGetTotal)).toEqual(printText);
+      });
+    });
+
+    describe('when promotion is five percent discount', () => {
+      var itemsGetTotal = {
+        itemsGetSubToal : [{
+          itemInfoCount: {
+            item: {
+              barcode: 'ITEM000001',
+              name: '可口可乐',
+              unit: '瓶',
+              category: '食品',
+              subCategory: '碳酸饮料',
+              price: 26.00
+            },count: 6
+          },subTotal: 148.2,
+          saveTotal: 7.8
+        },{
+          itemInfoCount: {
+            item : {
+              barcode: 'ITEM000004',
+              name: '加多宝',
+              unit: '罐',
+              category: '食品',
+              subCategory: '凉茶饮料',
+              price: 4.00
+            },count: 3
+          },subTotal: 12,
+          saveTotal: 0
+        }],
+        total : 160.2,
+        saved : 7.8
+      };
+
+      it('should return right data', () => {
+        var pos = new POS();
+        pos.setPromotions(['ITEM000002'],['ITEM000001','ITEM000003']);
+        var printText = `***<没钱赚商店>购物清单***
+名称：可口可乐，数量：6瓶，单价：26.00(元)，小计：148.20(元)，节省7.80(元)
+名称：加多宝，数量：3罐，单价：4.00(元)，小计：12.00(元)
+----------------------
+总计：160.20(元)
+节省：7.80(元)
+**********************`;
+        expect(pos.print(itemsGetTotal)).toEqual(printText);
+      });
+    });
+
+    describe('when promotions are five percent discount and buy two send one', () => {
+      var itemsGetTotal = {
+        itemsGetSubToal : [{
+          itemInfoCount: {
+            item: {
+              barcode: 'ITEM000001',
+              name: '可口可乐',
+              unit: '瓶',
+              category: '食品',
+              subCategory: '碳酸饮料',
+              price: 26.00
+            },count: 6
+          },subTotal: 104,
+          saveTotal: 52
+        },{
+          itemInfoCount: {
+            item : {
+              barcode: 'ITEM000004',
+              name: '加多宝',
+              unit: '罐',
+              category: '食品',
+              subCategory: '凉茶饮料',
+              price: 4.00
+            },count: 3
+          },subTotal: 11.4,
+          saveTotal: 0.6
+        }],
+        total : 115.4,
+        saved : 52.6
+      };
+
+      it('should return right data', () => {
+        var pos = new POS();
+        pos.setPromotions(['ITEM000001','ITEM000003'],['ITEM000002','ITEM000004']);
+        var printText = `***<没钱赚商店>购物清单***
+名称：可口可乐，数量：6瓶，单价：26.00(元)，小计：104.00(元)
+名称：加多宝，数量：3罐，单价：4.00(元)，小计：11.40(元)，节省0.60(元)
+----------------------
+买二赠一商品：
+名称：可口可乐，数量：2瓶
+----------------------
+总计：115.40(元)
+节省：52.60(元)
+**********************`;
+        expect(pos.print(itemsGetTotal)).toEqual(printText);
+      });
+    })
+  });
+
 });
