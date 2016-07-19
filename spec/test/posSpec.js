@@ -69,22 +69,6 @@ describe('POS', () => {
     });
   });
 
-  describe('transCodeToInfo', () => {
-    it('should return right data', () => {
-      var pos = new POS();
-      pos.setInfoes(itemsInfo);
-      var barcode = 'ITEM000001';
-      expect(pos.transCodeToInfo(barcode)).toEqual({
-        barcode: 'ITEM000001',
-        name: '可口可乐',
-        unit: '瓶',
-        category: '食品',
-        subCategory: '碳酸饮料',
-        price: 26.00
-      });
-    });
-  });
-
   describe('transCodesToInfoes', () => {
     var barcodeCounts = [{barcode: 'ITEM000001', count: 5}, {barcode: 'ITEM000004', count: 3}];
     it('should return right data', () => {
