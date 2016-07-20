@@ -45,8 +45,25 @@ describe('POS', () => {
     var fivePercentDiscount = ['ITEM000001'];
     it('should pos.promotions is right', () => {
       var pos = new POS();
-      pos.setPromotions(buyTwoGetOneFree, fivePercentDiscount);
-      var promotions = {buyTwoGetOneFree: buyTwoGetOneFree, fivePercentDiscount: fivePercentDiscount};
+      pos.setPromotions('BUY_TWO_GET_ONE_FREE', buyTwoGetOneFree);
+      var expectPromotions = [
+        {
+          type: 'BUY_TWO_GET_ONE_FREE',
+          barcodes: ['ITEM000001','ITEM000002']
+        }
+      ];
+      expect(pos.promotions).toEqual(expectPromotions);
+
+      pos.setPromotions('FIVE_PERCENT_DISCOUNT', fivePercentDiscount);
+      promotions = [
+        {
+          type: 'BUY_TWO_GET_ONE_FREE',
+          barcodes: ['ITEM000001','ITEM000002']
+        },{
+          type: 'FIVE_PERCENT_DISCOUNT',
+          barcodes: ['ITEM000001']
+        }
+      ];
       expect(pos.promotions).toEqual(promotions);
     })
   });
@@ -66,22 +83,6 @@ describe('POS', () => {
       var pos = new POS();
 
       expect(pos.sameBarcodeCounts(codes)).toEqual([{barcode: 'ITEM000001', count: 5}, {barcode: 'ITEM000004', count: 3}]);
-    });
-  });
-
-  describe('transCodeToInfo', () => {
-    it('should return right data', () => {
-      var pos = new POS();
-      pos.setInfoes(itemsInfo);
-      var barcode = 'ITEM000001';
-      expect(pos.transCodeToInfo(barcode)).toEqual({
-        barcode: 'ITEM000001',
-        name: '可口可乐',
-        unit: '瓶',
-        category: '食品',
-        subCategory: '碳酸饮料',
-        price: 26.00
-      });
     });
   });
 
@@ -173,7 +174,7 @@ describe('POS', () => {
     describe('when promotion is buy two send one', () => {
       it('should return right data', () => {
         var pos = new POS();
-        pos.setPromotions(['ITEM000001','ITEM000003'],['ITEM000002']);
+        pos.setPromotions('BUY_TWO_GET_ONE_FREE', ['ITEM000001','ITEM000003']);
         var itemsGetSubToal = [{
           itemInfoCount: {
             item: {
@@ -206,7 +207,7 @@ describe('POS', () => {
     describe('when promotion is five percent discount', () => {
       it('should return right data', () => {
         var pos = new POS();
-        pos.setPromotions(['ITEM000002'],['ITEM000001','ITEM000003']);
+        pos.setPromotions('FIVE_PERCENT_DISCOUNT', ['ITEM000001','ITEM000003']);
         var itemsGetSubToal = [{
           itemInfoCount: {
             item: {
@@ -239,7 +240,8 @@ describe('POS', () => {
     describe('when promotions are five percent discount and buy two send one', () => {
       it('should return right data', () => {
         var pos = new POS();
-        pos.setPromotions(['ITEM000001','ITEM000003'],['ITEM000002','ITEM000004']);
+        pos.setPromotions('BUY_TWO_GET_ONE_FREE', ['ITEM000001','ITEM000003']);
+        pos.setPromotions('FIVE_PERCENT_DISCOUNT', ['ITEM000002','ITEM000004']);
         var itemsGetSubToal = [{
           itemInfoCount: {
             item: {
@@ -266,41 +268,6 @@ describe('POS', () => {
           saveTotal: 0.6
         }];
         expect(pos.getSubTotal(itemInfoCounts)).toEqual(itemsGetSubToal);
-      });
-    });
-  });
-
-  describe('searchPromotions', () => {
-    var barcode = 'ITEM000001';
-
-    describe('when no promotions', () => {
-      it('should return 0', () => {
-        var pos = new POS();
-        expect(pos.searchPromotions(barcode)).toEqual(0)
-      });
-    });
-
-    describe('when promotion is buy two send one', () => {
-      it('should return 1', () => {
-        var pos = new POS();
-        pos.setPromotions(['ITEM000001','ITEM000003'],['ITEM000002']);
-        expect(pos.searchPromotions(barcode)).toEqual(1);
-      });
-    });
-
-    describe('when promotion is five percent discount', () => {
-      it('should return 2', () => {
-        var pos = new POS();
-        pos.setPromotions(['ITEM000002'],['ITEM000001','ITEM000003']);
-        expect(pos.searchPromotions(barcode)).toEqual(2);
-      });
-    });
-
-    describe('when promotions are five percent discount and buy two send one', () => {
-      it('should return 1', () => {
-        var pos = new POS();
-        pos.setPromotions(['ITEM000001','ITEM000002'],['ITEM000001','ITEM000003']);
-        expect(pos.searchPromotions(barcode)).toEqual(1);
       });
     });
   });
@@ -641,7 +608,7 @@ describe('POS', () => {
 
       it('should return right data', () => {
         var pos = new POS();
-        pos.setPromotions(['ITEM000001','ITEM000003'],['ITEM000002']);
+        pos.setPromotions('BUY_TWO_GET_ONE_FREE',['ITEM000001','ITEM000003']);
         var printText = `***<没钱赚商店>购物清单***
 名称：可口可乐，数量：6瓶，单价：26.00(元)，小计：104.00(元)
 名称：加多宝，数量：3罐，单价：4.00(元)，小计：12.00(元)
@@ -689,7 +656,7 @@ describe('POS', () => {
 
       it('should return right data', () => {
         var pos = new POS();
-        pos.setPromotions(['ITEM000002'],['ITEM000001','ITEM000003']);
+        pos.setPromotions('FIVE_PERCENT_DISCOUNT',['ITEM000001','ITEM000003']);
         var printText = `***<没钱赚商店>购物清单***
 名称：可口可乐，数量：6瓶，单价：26.00(元)，小计：148.20(元)，节省7.80(元)
 名称：加多宝，数量：3罐，单价：4.00(元)，小计：12.00(元)
@@ -734,7 +701,8 @@ describe('POS', () => {
 
       it('should return right data', () => {
         var pos = new POS();
-        pos.setPromotions(['ITEM000001','ITEM000003'],['ITEM000002','ITEM000004']);
+        pos.setPromotions('BUY_TWO_GET_ONE_FREE',['ITEM000001','ITEM000003']);
+        pos.setPromotions('FIVE_PERCENT_DISCOUNT',['ITEM000002','ITEM000004']);
         var printText = `***<没钱赚商店>购物清单***
 名称：可口可乐，数量：6瓶，单价：26.00(元)，小计：104.00(元)
 名称：加多宝，数量：3罐，单价：4.00(元)，小计：11.40(元)，节省0.60(元)
